@@ -1,0 +1,12 @@
+{
+    "copilotClientId": "",
+    "displayMode": "unified",
+    "showGemini": true,
+    "showAntigravity": true,
+    "showCopilot": true,
+    "showClaude": false,
+    "geminiInMenuBar": true,
+    "antigravityInMenuBar": true,
+    "copilotInMenuBar": true,
+    "claudeInMenuBar": false
+}
