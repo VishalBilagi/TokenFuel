@@ -4,6 +4,8 @@
 
 TokenFuel is a native macOS menu bar application designed to help you track your usage quotas for various AI coding assistants. It provides a quick, at-a-glance view of your remaining limits for tools like GitHub Copilot, Antigravity, and Google Gemini.
 
+![App-Screenshot](./assets/app-screenshot-1.png)
+
 ## Key Features
 
 *   **Unified Dashboard:** Monitor multiple AI providers in a single, clean menu bar interface.
