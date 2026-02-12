@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Progress Ring
 
 /// A small circular progress ring for menu bar and dropdown display.
-struct ProgressRing: View {
+struct ProgressRing: View, Equatable {
     let percentage: Double
     var size: CGFloat = 14
     var lineWidth: CGFloat = 2.5

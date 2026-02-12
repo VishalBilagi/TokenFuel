@@ -78,7 +78,7 @@ actor CopilotProvider: QuotaProvider {
 
     // MARK: - QuotaProvider
 
-    func fetchQuotas() async throws -> [QuotaInfo] {
+    func fetchQuotas() async throws(ProviderError) -> [QuotaInfo] {
         log.info("Starting Copilot fetch…")
 
         guard !clientId.isEmpty else {
@@ -89,7 +89,13 @@ actor CopilotProvider: QuotaProvider {
             throw ProviderError.missingConfig(String(localized: "Not signed in to Copilot. Click 'Sign in to Copilot' in the menu.", comment: "Error message when not signed in"))
         }
 
-        return try await fetchUserData(token: stored.access_token)
+        do {
+            return try await fetchUserData(token: stored.access_token)
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
     }
 
     // MARK: - Device Flow Auth

@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Provider Icon Helpers
 
 /// A view that displays the provider's brand icon at the given size.
-struct ProviderIconView: View {
+struct ProviderIconView: View, Equatable {
     let providerName: String
     var size: CGFloat = 14
 
@@ -26,10 +26,6 @@ struct ProviderIconView: View {
     }
 }
 
-/// Legacy free function — forwards to ProviderIconView.icon(for:).
-func providerIcon(for name: String) -> Image {
-    ProviderIconView.icon(for: name)
-}
 
 // MARK: - Previews
 

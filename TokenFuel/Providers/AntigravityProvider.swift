@@ -33,19 +33,41 @@ struct AntigravityProvider: QuotaProvider {
 
     // MARK: - QuotaProvider
 
-    func fetchQuotas() async throws -> [QuotaInfo] {
+    func fetchQuotas() async throws(ProviderError) -> [QuotaInfo] {
         log.info("Starting Antigravity fetch…")
 
         // 1. Find the language server process
-        let (pid, csrfToken) = try await findLanguageServer()
+        let pid: String
+        let csrfToken: String
+        do {
+            (pid, csrfToken) = try await findLanguageServer()
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
         log.info("Found language server — PID: \(pid), token: \(csrfToken.prefix(8))…")
 
         // 2. Find the listening port
-        let port = try await findListeningPort(pid: pid)
+        let port: String
+        do {
+            port = try await findListeningPort(pid: pid)
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
         log.info("Found listening port: \(port)")
 
         // 3. Call the local API
-        let results = try await fetchUserStatus(port: port, csrfToken: csrfToken)
+        let results: [QuotaInfo]
+        do {
+            results = try await fetchUserStatus(port: port, csrfToken: csrfToken)
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
         log.info("Got \(results.count) quota entries")
         return results
     }

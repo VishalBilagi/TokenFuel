@@ -36,14 +36,19 @@ struct GeminiProvider: QuotaProvider {
 
     // MARK: - QuotaProvider
 
-    func fetchQuotas() async throws -> [QuotaInfo] {
+    func fetchQuotas() async throws(ProviderError) -> [QuotaInfo] {
         log.info("Starting Gemini fetch…")
 
         guard FileManager.default.fileExists(atPath: credentialURL.path) else {
             throw ProviderError.missingConfig(String(localized: "No Gemini credentials found. Run 'gemini' CLI to sign in.", comment: "Error message when credentials file is missing"))
         }
 
-        let creds = try loadCredentials()
+        let creds: OAuthCreds
+        do {
+            creds = try loadCredentials()
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
 
         // Check if token is expired
         let now = Int64(Date().timeIntervalSince1970 * 1000)
@@ -52,7 +57,13 @@ struct GeminiProvider: QuotaProvider {
             throw ProviderError.missingConfig(String(localized: "Gemini token expired. Run 'gemini' CLI to refresh.", comment: "Error message when token is expired"))
         }
 
-        return try await fetchQuotaData(accessToken: creds.access_token)
+        do {
+            return try await fetchQuotaData(accessToken: creds.access_token)
+        } catch let error as ProviderError {
+            throw error
+        } catch {
+            throw ProviderError.parseError(error.localizedDescription)
+        }
     }
 
     // MARK: - Private Helpers

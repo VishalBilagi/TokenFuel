@@ -174,14 +174,14 @@ final class QuotaManager {
                     // 1. Replenished: Was 0, now > 0
                     if oldQuota.percentage == 0 && newQuota.percentage > 0 {
                         let title = String(localized: "\(newQuota.providerName) Replenished", comment: "Notification title")
-                        let body = String(localized: "\(newQuota.name) is now at \(Int(newQuota.percentage))%.", comment: "Notification body")
+                        let body = String(localized: "\(newQuota.providerName) — \(newQuota.name) is now at \(Int(newQuota.percentage))%.", comment: "Notification body")
                         NotificationManager.shared.sendNotification(title: title, body: body)
                     }
                     
                     // 2. Depleted: Was > 0, now 0
                     if oldQuota.percentage > 0 && newQuota.percentage == 0 {
                         let title = String(localized: "\(newQuota.providerName) Depleted", comment: "Notification title")
-                        var body = String(localized: "\(newQuota.name) has reached 0%.", comment: "Notification body")
+                        var body = String(localized: "\(newQuota.providerName) — \(newQuota.name) has reached 0%.", comment: "Notification body")
                         
                         // If reset time is known, schedule a notification for then
                         if let reset = newQuota.resetTime {
