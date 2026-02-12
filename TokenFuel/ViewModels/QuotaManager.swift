@@ -24,7 +24,7 @@ final class QuotaManager {
     var isCopilotSigningIn = false
 
     // Stored provider instances — reused across refreshes (fixes 2.10)
-    let copilotProvider = CopilotProvider()
+    let copilotProvider: CopilotProvider
     private let geminiProvider = GeminiProvider()
     private let antigravityProvider = AntigravityProvider()
     
@@ -35,8 +35,10 @@ final class QuotaManager {
     private var hasStarted = false
 
     init() {
-        self.config = AppConfig.load()
-        Task { await copilotProvider.updateClientId(config.copilotClientId) }
+        let loadedConfig = AppConfig.load()
+        self.config = loadedConfig
+        // Initialize CopilotProvider with the ID immediately to prevent race conditions
+        self.copilotProvider = CopilotProvider(clientId: loadedConfig.copilotClientId)
         
         if config.sendNotifications == true {
             NotificationManager.shared.requestAuthorization()
