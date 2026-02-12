@@ -12,7 +12,13 @@ enum DisplayMode: String, Codable, CaseIterable {
 /// App configuration — loaded from the bundled config.json,
 /// with user overrides saved to Application Support.
 struct AppConfig: Codable {
-    var copilotClientId: String
+    var copilotClientId: String {
+        guard let infoPlistId = Bundle.main.object(forInfoDictionaryKey: "COPILOT_CLIENT_ID") as? String,
+              !infoPlistId.isEmpty else {
+            return ""
+        }
+        return infoPlistId
+    }
     var displayMode: DisplayMode
     var showGemini: Bool
     var showAntigravity: Bool
@@ -32,7 +38,6 @@ struct AppConfig: Codable {
     var refreshInterval: TimeInterval?
 
     static let `default` = AppConfig(
-        copilotClientId: "",
         displayMode: .unified,
         showGemini: true,
         showAntigravity: true,
@@ -85,13 +90,7 @@ struct AppConfig: Codable {
             config = .default
         }
 
-        // 3. If copilotClientId is still empty, try Info.plist (build-time injection)
-        if config.copilotClientId.isEmpty,
-           let infoPlistId = Bundle.main.object(forInfoDictionaryKey: "COPILOT_CLIENT_ID") as? String,
-           !infoPlistId.isEmpty {
-            log.info("Loaded Copilot client ID from Info.plist")
-            config.copilotClientId = infoPlistId
-        }
+
 
         return config
     }
