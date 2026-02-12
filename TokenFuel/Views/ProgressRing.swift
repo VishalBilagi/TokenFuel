@@ -72,7 +72,7 @@ struct MenuBarProgressLabel: View {
 #Preview("Menu Bar Label") {
     MenuBarProgressLabel(
         percentage: 62,
-        icon: Image(systemName: "sparkle")
+        icon: Image("MenuBarIcon")
     )
     .padding()
 }

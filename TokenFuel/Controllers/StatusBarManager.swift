@@ -50,7 +50,7 @@ class StatusBarManager: NSObject, NSPopoverDelegate {
         let config = manager.config
         
         if config.displayMode == .unified {
-            ensureItem(key: "Unified", iconName: "sparkle", isSystem: true)
+            ensureItem(key: "Unified", iconName: "MenuBarIcon")
             removeItem(key: "Gemini")
             removeItem(key: "Antigravity")
             removeItem(key: "Copilot")

@@ -8,8 +8,10 @@ struct MenuBarPanel: View {
         VStack(alignment: .leading, spacing: 0) {
             // Header
             HStack {
-                Image(systemName: "sparkle")
-                    .foregroundStyle(.purple)
+                Image("MenuBarIcon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 16, height: 16)
                 Text(String(localized: "TokenFuel", comment: "App name in panel header"))
                     .font(.headline)
                 Spacer()
